@@ -1,121 +1,51 @@
 import { useState } from 'react'
-import heroImg from './assets/hero.png'
-import reactLogo from './assets/react.svg'
-import viteLogo from './assets/vite.svg'
-import './App.css'
+import Header from './component/Header'
+import RingkasanKursus from './component/Ringkasankursus'
+import FormTambahKursus from './component/Formtambahkursus'
+import KartuKursus from './component/KartuKursus'
+import DaftarKursus from './component/DaftarKursus'
+import Footer from './component/Footer'
+import { kursusAwal } from './data/kursusAwal'
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [daftarKursus, setDaftarKursus] = useState(kursusAwal)
+
+  const tambahKursus = (kursusBaru) => {
+    setDaftarKursus((sebelumnya) => [
+      ...sebelumnya,
+      { id: Date.now(), ...kursusBaru },
+    ])
+  }
+
+  const hapusKursus = (id) => {
+    setDaftarKursus((sebelumnya) => sebelumnya.filter((k) => k.id !== id))
+  }
+
+  const jumlahPemula = daftarKursus.filter((k) => k.level === 'Pemula').length
+  const jumlahLanjutan = daftarKursus.filter((k) => k.level === 'Lanjutan').length
 
   return (
-    <>
-      <section id="center">
-        <div className="hero">
-          <img src={heroImg} className="base" width="170" height="179" alt="" />
-          <img src={reactLogo} className="framework" alt="React logo" />
-          <img src={viteLogo} className="vite" alt="Vite logo" />
-        </div>
-        <div>
-          <h1>Get started</h1>
-          <p>
-            Edit <code>src/App.jsx</code> and save to test <code>HMR</code>
-          </p>
-        </div>
-        <button
-          type="button"
-          className="counter"
-          onClick={() => setCount((count) => count + 1)}
-        >
-          Count is {count}
-        </button>
-      </section>
+    <div className="flex min-h-screen flex-col">
+      <Header
+        judul="COURSE BAHASA"
+        subjudul="Kelola daftar kursus bahasa asing"
+      />
 
-      <div className="ticks"></div>
+      <main className="mx-auto w-full max-w-[1300px] flex-1 px-5 py-10 md:px-12 md:py-14">
+        <RingkasanKursus
+          total={daftarKursus.length}
+          pemula={jumlahPemula}
+          lanjutan={jumlahLanjutan}
+        />
 
-      <section id="next-steps">
-        <div id="docs">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#documentation-icon"></use>
-          </svg>
-          <h2>Documentation</h2>
-          <p>Your questions, answered</p>
-          <ul>
-            <li>
-              <a href="https://vite.dev/" target="_blank">
-                <img className="logo" src={viteLogo} alt="" />
-                Explore Vite
-              </a>
-            </li>
-            <li>
-              <a href="https://react.dev/" target="_blank">
-                <img className="button-icon" src={reactLogo} alt="" />
-                Learn more
-              </a>
-            </li>
-          </ul>
+        <div className="mt-8 grid items-start gap-8 lg:grid-cols-[380px_1fr]">
+          <FormTambahKursus onTambah={tambahKursus} />
+          <DaftarKursus daftarKursus={daftarKursus} onHapus={hapusKursus} />
         </div>
-        <div id="social">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#social-icon"></use>
-          </svg>
-          <h2>Connect with us</h2>
-          <p>Join the Vite community</p>
-          <ul>
-            <li>
-              <a href="https://github.com/vitejs/vite" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#github-icon"></use>
-                </svg>
-                GitHub
-              </a>
-            </li>
-            <li>
-              <a href="https://chat.vite.dev/" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#discord-icon"></use>
-                </svg>
-                Discord
-              </a>
-            </li>
-            <li>
-              <a href="https://x.com/vite_js" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#x-icon"></use>
-                </svg>
-                X.com
-              </a>
-            </li>
-            <li>
-              <a href="https://bsky.app/profile/vite.dev" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#bluesky-icon"></use>
-                </svg>
-                Bluesky
-              </a>
-            </li>
-          </ul>
-        </div>
-      </section>
+      </main>
 
-      <div className="ticks"></div>
-      <section id="spacer"></section>
-    </>
+      <Footer email="vincitore@gmail.com" telepon="+62 878-123-536" />
+    </div>
   )
 }
 
